@@ -15,7 +15,7 @@ cd kafka_2.13-3.0.0
 bin/zookeeper-server-start.sh config/zookeeper.properties
 
 # Start the Kafka broker service
-# https://somjang.tistory.com/entry/Kafka-could-not-be-established-Broker-may-not-be-available-orgapachekafkaclientsNetworkClient-%ED%95%B4%EA%B2%B0-%EB%B0%A9%EB%B2%95
+# listeners=PLAINTEXT://localhost:9092 | https://stackoverflow.com/questions/47677549/kafka-zookeeper-connection-to-node-1-could-not-be-established-broker-may-no
 bin/kafka-server-start.sh config/server.properties
 
 ## STEP 3: CREATE A TOPIC TO STORE YOUR EVENTS
