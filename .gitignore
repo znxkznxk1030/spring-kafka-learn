@@ -32,9 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 
-### Kafka ###
-kafka*
-
 ### Zip Files ### 
 *.zip
 *.tgz
