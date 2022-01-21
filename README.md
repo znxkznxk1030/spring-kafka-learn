@@ -44,6 +44,83 @@ bin/kafka-console-consumer.sh --topic quickstart-events --from-beginning --boots
 
 ![kafka | attached photo](./images/kafka-event.gif)
 
+## Spring Boot & Kafka
+
+### kafka 설정
+
+```yml
+spring:
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: foo
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      
+```
+
+### Producer
+
+```java
+@Service
+public class KafkaProducer {
+  private static final String TOPIC = "quickstart-events";
+  private final KafkaTemplate<String, String> kafkaTemplate;
+
+  @Autowired
+  public KafkaProducer(KafkaTemplate<String, String> kafkaTemplate) {
+    this.kafkaTemplate = kafkaTemplate;
+  }
+
+  public void sendMessage(String message) {
+    System.out.println(String.format("Produce message : %s", message));
+    this.kafkaTemplate.send(TOPIC, message);
+  }
+}
+```
+
+```java
+@RestController
+@RequestMapping(value = "/kafka")
+public class KafkaController {
+  private final KafkaProducer producer;
+
+  @Autowired
+  public KafkaController(KafkaProducer kafkaProducer) {
+    this.producer = kafkaProducer;
+  }
+
+  @PostMapping
+  public String sendMessage(@RequestParam("message") String message) {
+    this.producer.sendMessage(message);
+    return "success";
+  }
+
+}
+```
+
+![kafka spring-boot producer](./images/kafka-spring-boot-producer.gif)
+
+### Consumer
+
+```java
+@Service
+public class KafkaConsumer {
+  
+  @KafkaListener(topics = "quickstart-events", groupId = "foo")
+  public void consume(String message) throws IOException {
+    System.out.println(String.format("Consumed message : %s", message));
+  }
+}
+```
+
+![kafka spring-boot consumer](./images/kafka-sprint-boot-consumer.gif)
+
 ## 사용중인 Kafka PID 죽이기
 
 ```shell
