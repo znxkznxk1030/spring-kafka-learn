@@ -57,6 +57,10 @@ fi
 ```
 
 ```bash
-# zookeeper stop
+# zookeeper & config server stop
 bin/kafka-server-stop.sh
 ```
+
+## References
+
+- <https://victorydntmd.tistory.com/348>
